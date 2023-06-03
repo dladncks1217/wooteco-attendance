@@ -1,45 +1,48 @@
+import { useCallback } from "react";
+import { useQuery } from "react-query";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
+import useMembers from "../hooks/useMembers";
+import { memberListState } from "../recoil/members";
+import CrewItem from "./CrewItem";
 
-const mockData = {
-  date: "2023년 5월 28일",
-  crewList: [
-    { crew: "아커", isAttendance: false },
-    { crew: "슬링키", isAttendance: true },
-    { crew: "도기", isAttendance: false },
-    { crew: "오리", isAttendance: true },
-    { crew: "에밀", isAttendance: true },
-  ],
-};
+interface AttendanceProps {
+  modalClose: () => void;
+}
 
-const Attendance = () => {
-  const handleAttendanced = () => {
-    console.log("출석완료");
-  };
+const Attendance = ({ modalClose }: AttendanceProps) => {
+  const memberList = useRecoilValue(memberListState);
+  const { fetchAllMembers, fetchAttendance } = useMembers();
 
-  const handleUnAttendanced = () => {
-    console.log("결석완료");
-  };
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const date = now.getDate();
+  const DateText = `${year}년 ${month > 10 ? month : "0" + month}월 ${
+    date > 10 ? date : "0" + date
+  }일`;
+
+  const { isLoading } = useQuery("memberList", fetchAllMembers);
+
+  const handleFetchPost = useCallback(() => {
+    fetchAttendance(memberList);
+    modalClose();
+  }, [fetchAttendance, modalClose, memberList]);
 
   return (
     <StyledAttendance>
-      <StyledAttendanceHeader>{mockData.date}</StyledAttendanceHeader>
+      <StyledAttendanceHeader>{DateText}</StyledAttendanceHeader>
       <StyledCrewList>
-        {mockData.crewList.map((crewData) => {
-          return (
-            <StyledCrewItem isAttendance={crewData.isAttendance}>
-              {crewData.crew}
-              <div>
-                <AttendanceButton type="button" onClick={handleAttendanced}>
-                  출석
-                </AttendanceButton>
-                <UnAttendanceButton type="button" onClick={handleUnAttendanced}>
-                  결석
-                </UnAttendanceButton>
-              </div>
-            </StyledCrewItem>
-          );
-        })}
+        {isLoading
+          ? "로딩중"
+          : memberList.map((crew) => (
+              <CrewItem key={crew.memberId} crew={crew} isDisabled={false} />
+            ))}
       </StyledCrewList>
+      <StyledSubmitFlexBox>
+        <StyledSubmit onClick={handleFetchPost}>제츨</StyledSubmit>
+        <StyledSubmit>수정</StyledSubmit>
+      </StyledSubmitFlexBox>
     </StyledAttendance>
   );
 };
@@ -47,9 +50,8 @@ const Attendance = () => {
 const StyledAttendance = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 20px;
   width: 100%;
-  height: 100%;
   border: 1px solid #dddddd;
   border-radius: 5px;
 `;
@@ -69,47 +71,29 @@ const StyledAttendanceHeader = styled.div`
 const StyledCrewList = styled.ul`
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 10px;
   width: 100%;
-  height: 100%;
   overflow: scroll;
 `;
 
-const StyledCrewItem = styled.li<Record<"isAttendance", boolean>>`
+const StyledSubmitFlexBox = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
-
   width: 100%;
-  height: 60px;
+`;
+
+const StyledSubmit = styled.button`
+  width: 45%;
+  heigth: 60px;
+  padding: 5px;
   border-radius: 5px;
-  background-color: #ffffff;
-
-  padding: 0 10px;
-
-  color: ${(props) => (props.isAttendance ? "green" : "red")};
-  & > div {
-    display: flex;
-    gap: 5px;
+  background-color: #333333;
+  color: white;
+  transition: all 0.2s ease-in;
+  :hover {
+    background-color: #575757;
   }
-`;
-
-const AttendanceButton = styled.button`
-  color: #ffffff;
-  background-color: green;
-  border-radius: 3px;
-  padding: 8px;
-  letter-spacing: 3px;
-  text-align: center;
-`;
-
-const UnAttendanceButton = styled.button`
-  color: #ffffff;
-  background-color: red;
-  border-radius: 3px;
-  padding: 8px;
-  letter-spacing: 3px;
-  text-align: center;
 `;
 
 export default Attendance;

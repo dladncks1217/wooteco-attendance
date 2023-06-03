@@ -2,9 +2,11 @@ import { useCallback, useState } from "react";
 import styled from "styled-components";
 import Modal from "../components/Modal";
 import Attendance from "../components/Attendance";
+import ViewAttendance from "../components/ViewAttendance";
 
 const AttendancePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [attendanceModalOpen, setAttendanceModalOpen] = useState(false);
 
   const handleModalOpen = useCallback(() => {
     setIsModalOpen(true);
@@ -13,6 +15,14 @@ const AttendancePage = () => {
   const handleModalClose = useCallback(() => {
     setIsModalOpen(false);
   }, [setIsModalOpen]);
+
+  const handleAttendanceModalOpen = useCallback(() => {
+    setAttendanceModalOpen(true);
+  }, [setAttendanceModalOpen]);
+
+  const handleAttendanceModalClose = useCallback(() => {
+    setAttendanceModalOpen(false);
+  }, [setAttendanceModalOpen]);
 
   const mockDataList = [
     { date: "5월 19일" },
@@ -24,28 +34,30 @@ const AttendancePage = () => {
     { date: "5월 25일" },
     { date: "5월 26일" },
     { date: "5월 27일" },
-  ];
+  ].reverse();
 
   return (
     <StyledAttendanceSection>
       <StyledAttendanceList>
-        <StyledAttendanceAddItem onClick={handleModalOpen}>
+        <StyledAttendanceAddItem onClick={handleAttendanceModalOpen}>
           <button type="button">+</button>
         </StyledAttendanceAddItem>
         {mockDataList.map((mockData) => {
           return (
-            <StyledAttendanceItem>
+            <StyledAttendanceItem key={mockData.date} onClick={handleModalOpen}>
               <div>{mockData.date}</div>
-              <button type="button" onClick={handleModalOpen}>
-                출석 수정
-              </button>
             </StyledAttendanceItem>
           );
         })}
       </StyledAttendanceList>
+      {attendanceModalOpen && (
+        <Modal handleModalClose={handleAttendanceModalClose}>
+          <Attendance modalClose={handleAttendanceModalClose} />
+        </Modal>
+      )}
       {isModalOpen && (
         <Modal handleModalClose={handleModalClose}>
-          <Attendance />
+          <ViewAttendance />
         </Modal>
       )}
     </StyledAttendanceSection>
@@ -79,6 +91,7 @@ const StyledAttendanceAddItem = styled.li`
   height: 84px;
   border-radius: 5px;
   background-color: #333333;
+
   & > button {
     background-color: #ffffff;
     border-radius: 50%;
