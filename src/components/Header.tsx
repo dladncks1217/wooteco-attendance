@@ -18,9 +18,9 @@ const StyledHeader = styled.header`
   letter-spacing: 15px;
   font-size: 26px;
   width: 100vw;
-  height: 60px;
+  height: 80px;
   padding: 9px;
-  background-color: #333333;
+  background-color: #04c09e;
   color: #ffffff;
 `;
 

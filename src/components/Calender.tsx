@@ -136,7 +136,7 @@ const CalendarWrapper = styled.div`
   width: 80%;
   height: 100%;
   margin: 0 auto;
-  padding: 100px 0;
+  padding: 120px 0;
   font-size: 20px;
 `;
 
@@ -202,7 +202,7 @@ const DaysWrapper = styled.div`
     align-items: center;
     width: 25px;
     height: 25px;
-    background-color: red;
+    background-color: #04c09e;
     color: white;
     cursor: pointer;
   }
@@ -214,7 +214,7 @@ const DaysWrapper = styled.div`
     align-items: center;
     width: 25px;
     height: 25px;
-    background-color: blue;
+    background-color: #333333;
     color: white;
     cursor: pointer;
   }
