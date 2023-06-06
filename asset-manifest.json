@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/wooteco-attendance/static/js/main.018b86bd.js",
+    "main.js": "/wooteco-attendance/static/js/main.57bf6941.js",
     "index.html": "/wooteco-attendance/index.html",
-    "main.018b86bd.js.map": "/wooteco-attendance/static/js/main.018b86bd.js.map"
+    "main.57bf6941.js.map": "/wooteco-attendance/static/js/main.57bf6941.js.map"
   },
   "entrypoints": [
-    "static/js/main.018b86bd.js"
+    "static/js/main.57bf6941.js"
   ]
 }
