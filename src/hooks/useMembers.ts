@@ -52,20 +52,45 @@ const useMembers = () => {
   );
 
   const fetchAttendance = useCallback(async (members: Member[]) => {
+    const fetchData = members.map((member) => {
+      return {
+        memberId: member.memberId,
+        attendanceCode: member.attendance,
+      };
+    });
+
     await fetch(`${ORIGIN}/attendance-records`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(members),
+      body: JSON.stringify(fetchData),
     });
   }, []);
+
+  const editMemberList = useCallback(async () => {
+    const fetchData = members.map((member) => {
+      return {
+        memberId: member.memberId,
+        attendanceCode: member.attendance,
+      };
+    });
+
+    await fetch(`${ORIGIN}/attendance-records`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(fetchData),
+    });
+  }, [members]);
 
   return {
     fetchAllMembers,
     fetchDateMembers,
     fetchAttendance,
     onChangeMemberState,
+    editMemberList,
   };
 };
 

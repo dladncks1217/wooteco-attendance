@@ -53,4 +53,8 @@ export const handlers = [
 
     return res(ctx.status(201), ctx.delay(500));
   }),
+
+  rest.put("/attendance-records", (req, res, ctx) => {
+    return res(ctx.status(204), ctx.delay(500));
+  }),
 ];

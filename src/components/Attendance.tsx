@@ -12,15 +12,15 @@ interface AttendanceProps {
 
 const Attendance = ({ modalClose }: AttendanceProps) => {
   const memberList = useRecoilValue(memberListState);
-  const { fetchAllMembers, fetchAttendance } = useMembers();
+  const { fetchAllMembers, fetchAttendance, editMemberList } = useMembers();
 
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
   const date = now.getDate();
-  const DateText = `${year}년 ${month > 10 ? month : "0" + month}월 ${
+  const DateText = `${year}-${month > 10 ? month : "0" + month}-${
     date > 10 ? date : "0" + date
-  }일`;
+  }`;
 
   const { isLoading } = useQuery("memberList", fetchAllMembers);
 
@@ -28,6 +28,11 @@ const Attendance = ({ modalClose }: AttendanceProps) => {
     fetchAttendance(memberList);
     modalClose();
   }, [fetchAttendance, modalClose, memberList]);
+
+  const handleFetchEdit = useCallback(() => {
+    editMemberList();
+    modalClose();
+  }, [editMemberList, modalClose]);
 
   return (
     <StyledAttendance>
@@ -41,7 +46,7 @@ const Attendance = ({ modalClose }: AttendanceProps) => {
       </StyledCrewList>
       <StyledSubmitFlexBox>
         <StyledSubmit onClick={handleFetchPost}>제츨</StyledSubmit>
-        <StyledSubmit>수정</StyledSubmit>
+        <StyledSubmit onClick={handleFetchEdit}>수정</StyledSubmit>
       </StyledSubmitFlexBox>
     </StyledAttendance>
   );

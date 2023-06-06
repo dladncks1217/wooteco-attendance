@@ -5,17 +5,22 @@ import useMembers from "../hooks/useMembers";
 import { memberListState } from "../recoil/members";
 import CrewItem from "./CrewItem";
 
-const ViewAttendance = () => {
+interface ViewAttendanceProps {
+  clickDate: string;
+}
+
+const ViewAttendance = (props: ViewAttendanceProps) => {
+  const { clickDate } = props;
   const memberList = useRecoilValue(memberListState);
   const { fetchDateMembers } = useMembers();
 
   const { isLoading } = useQuery("attendance-record", () => {
-    fetchDateMembers("2023-06-03");
+    fetchDateMembers(clickDate);
   });
 
   return (
     <StyledAttendance>
-      <StyledAttendanceHeader>2023년 06월 03일</StyledAttendanceHeader>
+      <StyledAttendanceHeader>{clickDate}</StyledAttendanceHeader>
       <StyledCrewList>
         {isLoading
           ? "로딩중"
